@@ -62,11 +62,29 @@ const verifyEmail= async (req , res)=>{
 
 
  const login = async(req , res)=>{
-    res.send("login routes")
+    const {email, password} = req.body;
+    try{
+        const user = await User.findOne({email});
+        if(!user){
+            return res.status(404).json({message: 'User not found'});
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if(!isPasswordValid){
+            return res.status(401).json({message: 'Invalid credentials'});
+        } 
+        generateTokenAndSetCookie(res, user._id);
+        user.lastLogin = new Date();
+        await user.save();
+        res.status(200).json({message: 'Logged in successfully', success: true, user:{...user._doc, password:undefined}});
+    }
+    catch(err){
+        console.log(err);
+    }
 }
 
  const logout = async(req , res)=>{
-    res.send("logout routes")
+    res.clearCookie("token");
+    res.status(200).json({message:"logout successful"});
 }
 
 
