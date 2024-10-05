@@ -1,7 +1,11 @@
 import express from "express";
 const router = express.Router();
-import {signup , login , logout , verifyEmail , forgotPassword , resetPassword} from '../controllers/Auth.js'
+import {signup , login , logout , verifyEmail , forgotPassword , resetPassword, checkAuth} from '../controllers/Auth.js'
+import { verifyToken } from "../middleware/verifyToken.js";
 
+
+
+router.get('/check-auth',verifyToken , checkAuth)
 router.post('/signup' , signup)
 router.post('/login' , login)
 router.post('/logout' , logout)

@@ -1,6 +1,7 @@
 import { PASSWORD_RESET_REQUEST_TEMPLATE, VERIFICATION_EMAIL_TEMPLATE , PASSWORD_RESET_SUCCESS_TEMPLATE } from "./emailTemplate.js";
 import { mailTrapclient , sender } from "./mailtrap.config.js";
 
+
 export const sendVerificationEmail= async (email , name ,verificationToken)=>{
     const recipients = [{email}]
     try{
