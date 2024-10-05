@@ -8,6 +8,7 @@ import {
   sendResetPasswordEmail,
   sendVerificationEmail,
   sendwelcomeEmail,
+  sendResetSuccessEmail
 } from "../mailtrap/emails.js";
 
 const signup = async (req, res) => {
@@ -148,16 +149,20 @@ const resetPassword = async (req, res) => {
         resetPasswordToken: token,
         resetPasswordExpiresAt: { $gt: Date.now() },
     });
+    console.log(user);
+    
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    const hashedPassword = await bcrypt(password , 10);
+    const hashedPassword = await bcrypt.hash(password , 10);
+
     user.password = hashedPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpiresAt = undefined;
     await user.save();
+    await sendResetSuccessEmail(user.email)
+    
     res.status(200).json({ message: "password updated" , success: true});
-
 
     } catch (err) {}
 };
