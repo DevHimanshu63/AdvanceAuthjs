@@ -13,7 +13,7 @@ import {
 
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
-  console.log(req.body);
+  console.log("signUp data recieved from the user---->",req.body);
   try {
     if (!email || !password || !name) {
       throw new Error(`All fields must be required`);
@@ -38,7 +38,9 @@ const signup = async (req, res) => {
     });
     await newUser.save();
     //jwt generate token and set cookie
+    console.log('Before calling generateTokenAndSetCookie');
     generateTokenAndSetCookie(res, newUser._id);
+    console.log('after calling generateTokenAndSetCookie');
     await sendVerificationEmail(
       newUser.email,
       newUser.name,
@@ -52,8 +54,8 @@ const signup = async (req, res) => {
         password: undefined,
       },
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error) {    
+    console.log(error);  
   }
 };
 
@@ -168,8 +170,6 @@ const resetPassword = async (req, res) => {
 };
 
 export const checkAuth= async(req, res) => {
-    console.log('request',req.user);
-    
     try{
         const user = await User.findById(req.userId).select("-password");
         if(!user){
