@@ -9,6 +9,7 @@ import { Toaster } from 'react-hot-toast'
 import { useAuthStore } from './store/authStore'
 import { useEffect } from 'react'
 import ForgotPassword from './Pages/ForgotPassword'
+import ResetPassword from './Pages/ResetPassword'
 
 //protected routes that require authentication
 
@@ -70,8 +71,18 @@ function App() {
       <Route path='/forgot-password' element={
         <RedirectedAuthenticatedUser>
           <ForgotPassword/>
-      </RedirectedAuthenticatedUser>} />
+        </RedirectedAuthenticatedUser>
+    } />
+
+<Route path='/reset-password/:token' element={
+        <RedirectedAuthenticatedUser>
+          <ResetPassword/>
+        </RedirectedAuthenticatedUser>
+    } />
+
+
     </Routes>
+    
     <Toaster/>
     </div>
   )
